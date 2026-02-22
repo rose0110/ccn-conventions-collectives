@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convention Collective</title>
+  <link rel="stylesheet" href="css/shared.css?v=16">
+  <link rel="stylesheet" href="css/convention.css?v=16">
+  <link rel="stylesheet" href="css/chatbot.css?v=16">
+  <link rel="stylesheet" href="css/comparateur.css?v=16">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- Barre d'actions (pleine largeur, fixee en haut) -->
+  <div class="action-bar">
+    <div class="action-bar-title" id="action-bar-title">Convention Collective</div>
+    <div class="action-btns">
+      <button id="btn-print" class="btn btn-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"></polyline>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+          <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+        Imprimer
+      </button>
+      <a href="index.html" class="btn btn-sm btn-secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Retour
+      </a>
+    </div>
+  </div>
+
+  <!-- Zone contenu + sidebar -->
+  <div class="app-body">
+
+    <!-- ZONE PRINCIPALE -->
+    <div class="main-area">
+      <div class="content-scroll" id="content-scroll">
+        <!-- Page de garde (visible seulement en print) -->
+        <div class="print-cover" id="print-cover"></div>
+
+        <!-- Table des matieres (visible seulement en print) -->
+        <div class="print-toc" id="print-toc"></div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading">Chargement de la convention...</div>
+
+        <!-- Sections renderees par JS -->
+        <div id="sections-container"></div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-search">
+        <input type="text" id="section-search" placeholder="Filtrer les sections...">
+      </div>
+      <div class="sidebar-nav" id="sidebar-nav">
+        <!-- Navigation rendered by JS -->
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- BOUTON TOC MOBILE -->
+  <button id="mobile-toc-toggle" class="mobile-toc-toggle" title="Menu">
+    &#9776;
+  </button>
+
+  <!-- OVERLAY MOBILE -->
+  <div id="toc-overlay" class="toc-overlay"></div>
+
+</div>
+
+<script src="js/shared.js?v=16"></script>
+<script src="js/chatbot.js?v=16"></script>
+<script src="js/comparateur.js?v=16"></script>
+<script src="js/convention.js?v=16"></script>
+</body>
+</html>

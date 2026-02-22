@@ -1,0 +1,133 @@
+/* =============================================================================
+   HOME.CSS — Page d'accueil : grille de cartes (mode iframe)
+   ============================================================================= */
+
+/* ===== LAYOUT GLOBAL ===== */
+body {
+  min-height: 100vh;
+  background: #fff;
+}
+
+/* ===== CONTENU PRINCIPAL ===== */
+.home-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 32px;
+}
+
+/* ===== BARRE DE RECHERCHE ===== */
+.home-search-bar {
+  position: relative;
+  max-width: 600px;
+  margin-bottom: 28px;
+}
+.home-search-bar .search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: rgb(156, 163, 175);
+  pointer-events: none;
+}
+.home-search-bar .search-input {
+  width: 100%;
+  padding: 10px 40px 10px 40px;
+  border-radius: 8px;
+  border: 1px solid rgb(209, 213, 219);
+  background: rgb(249, 250, 251);
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text);
+  transition: all var(--transition);
+}
+.home-search-bar .search-input:focus {
+  outline: none;
+  border-color: rgb(107, 114, 128);
+  box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.15);
+}
+.home-search-bar .search-input::placeholder {
+  color: rgb(156, 163, 175);
+}
+.home-search-bar .search-count {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+/* ===== GRILLE DE CARTES ===== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* ===== CARTE CONVENTION ===== */
+.convention-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: rgb(244, 254, 239);
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  color: rgb(31, 41, 55);
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+.convention-card:hover {
+  background: rgb(226, 255, 216);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  color: rgb(31, 41, 55);
+}
+.convention-card:hover .card-name {
+  text-decoration: underline;
+}
+
+/* Badge IDCC */
+.card-badge {
+  display: inline-block;
+}
+.card-badge-idcc {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Nom */
+.card-name {
+  font-size: 14px;
+  color: rgb(31, 41, 55);
+  line-height: 1.4;
+}
+
+/* ===== NO RESULTS ===== */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text3);
+  font-size: 15px;
+  grid-column: 1 / -1;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .home-main {
+    padding: 20px 16px;
+  }
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

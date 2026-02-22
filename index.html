@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conventions Collectives - Smart Data Pay</title>
+  <link rel="stylesheet" href="css/shared.css?v=7">
+  <link rel="stylesheet" href="css/home.css?v=7">
+</head>
+<body>
+
+  <!-- CONTENU PRINCIPAL -->
+  <div class="home-main">
+    <!-- RECHERCHE -->
+    <div class="home-search-bar">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" id="search" class="search-input"
+             placeholder="Rechercher une synthèse"
+             autocomplete="off" autofocus>
+      <span id="search-count" class="search-count"></span>
+    </div>
+
+    <!-- GRILLE DE CARTES -->
+    <div class="cards-grid" id="cards-grid">
+      <div class="loading">Chargement des conventions...</div>
+    </div>
+    <div class="no-results" id="no-results" style="display: none">
+      Aucune convention trouv&eacute;e pour cette recherche.
+    </div>
+  </div>
+
+  <script src="js/shared.js?v=7"></script>
+  <script src="js/home.js?v=7"></script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+{
+  "_meta": {
+    "version": "2026-02",
+    "description": "Dispositions legales par defaut du Code du travail francais",
+    "last_updated": "2026-02-22"
+  },
+
+  "informations_generales": {
+    "comparable": false,
+    "needs_calculation": false,
+    "resume": "Les informations generales relevent de chaque convention collective de branche. Le Code du travail ne definit pas de dispositions generales comparables.",
+    "details": []
+  },
+
+  "periode_essai": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "CDI : duree initiale maximale de 2 mois (ouvriers/employes), 3 mois (agents de maitrise/techniciens), 4 mois (cadres). Renouvellement possible une fois si prevu par accord de branche etendu ET par le contrat de travail, portant la duree totale maximale a 4, 6 ou 8 mois selon la categorie. CDD : 1 jour par semaine dans la limite de 2 semaines si contrat <= 6 mois, ou 1 mois maximum si contrat > 6 mois.",
+    "details": [
+      { "critere": "CDI — Ouvriers / Employes", "valeur": "2 mois (renouvelable : 4 mois max)", "reference": "L1221-19 / L1221-21" },
+      { "critere": "CDI — Agents de maitrise / Techniciens", "valeur": "3 mois (renouvelable : 6 mois max)", "reference": "L1221-19 / L1221-21" },
+      { "critere": "CDI — Cadres", "valeur": "4 mois (renouvelable : 8 mois max)", "reference": "L1221-19 / L1221-21" },
+      { "critere": "CDD <= 6 mois", "valeur": "1 jour / semaine (max 2 semaines)", "reference": "L1242-10" },
+      { "critere": "CDD > 6 mois", "valeur": "1 mois maximum", "reference": "L1242-10" },
+      { "critere": "Interim", "valeur": "2, 3 ou 5 jours selon duree du contrat", "reference": "L1251-14" }
+    ]
+  },
+
+  "delai_prevenance": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "En cas de rupture de la periode d'essai, le delai de prevenance varie selon la duree de presence dans l'entreprise. A l'initiative de l'employeur : 24h (< 8 jours), 48h (8 jours a 1 mois), 2 semaines (1 a 3 mois), 1 mois (> 3 mois). A l'initiative du salarie : 24h (< 8 jours), 48h (>= 8 jours).",
+    "details": [
+      { "critere": "Employeur — Presence < 8 jours", "valeur": "24 heures", "reference": "L1221-25" },
+      { "critere": "Employeur — 8 jours a 1 mois", "valeur": "48 heures", "reference": "L1221-25" },
+      { "critere": "Employeur — 1 mois a 3 mois", "valeur": "2 semaines", "reference": "L1221-25" },
+      { "critere": "Employeur — Plus de 3 mois", "valeur": "1 mois", "reference": "L1221-25" },
+      { "critere": "Salarie — Presence < 8 jours", "valeur": "24 heures", "reference": "L1221-26" },
+      { "critere": "Salarie — Presence >= 8 jours", "valeur": "48 heures", "reference": "L1221-26" }
+    ]
+  },
+
+  "preavis": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Licenciement CDI : 1 mois si anciennete entre 6 mois et 2 ans, 2 mois si anciennete >= 2 ans. Moins de 6 mois : fixe par la convention ou les usages. Demission : fixe par la convention, le contrat ou les usages (pas de duree legale). Mise a la retraite : 1 ou 2 mois selon anciennete. Depart volontaire a la retraite : 1 ou 2 mois selon anciennete.",
+    "details": [
+      { "critere": "Licenciement — 6 mois a < 2 ans", "valeur": "1 mois", "reference": "L1234-1" },
+      { "critere": "Licenciement — >= 2 ans", "valeur": "2 mois", "reference": "L1234-1" },
+      { "critere": "Licenciement — < 6 mois", "valeur": "Convention ou usages", "reference": "L1234-1" },
+      { "critere": "Demission", "valeur": "Convention, contrat ou usages", "reference": "L1237-1" },
+      { "critere": "Depart retraite — < 2 ans", "valeur": "1 mois", "reference": "L1237-10" },
+      { "critere": "Depart retraite — >= 2 ans", "valeur": "2 mois", "reference": "L1237-10" }
+    ]
+  },
+
+  "indemnite_licenciement": {
+    "comparable": true,
+    "needs_calculation": true,
+    "resume": "Indemnite legale de licenciement : 1/4 de mois de salaire par annee d'anciennete pour les 10 premieres annees, puis 1/3 de mois par annee au-dela de 10 ans. Condition : 8 mois d'anciennete ininterrompue. Salaire de reference : moyenne des 12 derniers mois OU des 3 derniers mois (le plus favorable au salarie). Applicable sauf faute grave ou lourde.",
+    "details": [
+      { "critere": "Anciennete minimale requise", "valeur": "8 mois", "reference": "L1234-9" },
+      { "critere": "0 a 10 ans d'anciennete", "valeur": "1/4 de mois par annee", "reference": "R1234-2" },
+      { "critere": "Au-dela de 10 ans", "valeur": "1/3 de mois par annee", "reference": "R1234-2" },
+      { "critere": "Salaire de reference", "valeur": "Moyenne 12 ou 3 derniers mois (le + favorable)", "reference": "R1234-4" },
+      { "critere": "Exclusion", "valeur": "Faute grave ou faute lourde", "reference": "L1234-9" }
+    ]
+  },
+
+  "indemnite_depart_retraite": {
+    "comparable": true,
+    "needs_calculation": true,
+    "resume": "Indemnite legale de depart volontaire a la retraite, apres 10 ans d'anciennete : 1/2 mois (10 a 15 ans), 1 mois (15 a 20 ans), 1,5 mois (20 a 30 ans), 2 mois (30 ans et plus). Base de calcul identique a l'indemnite de licenciement.",
+    "details": [
+      { "critere": "Anciennete < 10 ans", "valeur": "Aucune indemnite legale", "reference": "L1237-9" },
+      { "critere": "10 a 14 ans", "valeur": "1/2 mois de salaire", "reference": "D1237-1" },
+      { "critere": "15 a 19 ans", "valeur": "1 mois de salaire", "reference": "D1237-1" },
+      { "critere": "20 a 29 ans", "valeur": "1,5 mois de salaire", "reference": "D1237-1" },
+      { "critere": "30 ans et plus", "valeur": "2 mois de salaire", "reference": "D1237-1" }
+    ]
+  },
+
+  "indemnite_mise_retraite": {
+    "comparable": true,
+    "needs_calculation": true,
+    "resume": "Mise a la retraite a l'initiative de l'employeur (possible a partir de 70 ans, ou 65-69 ans avec accord du salarie) : l'indemnite est au minimum egale a l'indemnite legale de licenciement (1/4 mois par annee pour les 10 premieres, 1/3 au-dela).",
+    "details": [
+      { "critere": "Age minimum (sans accord)", "valeur": "70 ans", "reference": "L1237-5" },
+      { "critere": "Age minimum (avec accord salarie)", "valeur": "65 ans", "reference": "L1237-5" },
+      { "critere": "Indemnite minimale", "valeur": "= Indemnite legale de licenciement", "reference": "L1237-7" },
+      { "critere": "0 a 10 ans", "valeur": "1/4 de mois par annee", "reference": "R1234-2" },
+      { "critere": "Au-dela de 10 ans", "valeur": "1/3 de mois par annee", "reference": "R1234-2" }
+    ]
+  },
+
+  "indemnite_precarite": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Indemnite de fin de CDD (precarite) : 10 % de la remuneration brute totale versee pendant le contrat. Peut etre reduite a 6 % par accord de branche etendu si des contreparties sont prevues (acces a la formation). Non due en cas d'embauche en CDI, de refus de CDI, de faute grave, de force majeure, ou de contrats saisonniers/etudiants.",
+    "details": [
+      { "critere": "Taux legal", "valeur": "10 % de la remuneration brute totale", "reference": "L1243-8" },
+      { "critere": "Taux reduit (accord de branche)", "valeur": "6 % minimum avec contreparties", "reference": "L1243-9" },
+      { "critere": "Non due si", "valeur": "Embauche CDI, faute grave, force majeure, saisonnier", "reference": "L1243-10" }
+    ]
+  },
+
+  "indemnite_rupture_conventionnelle": {
+    "comparable": true,
+    "needs_calculation": true,
+    "resume": "L'indemnite specifique de rupture conventionnelle ne peut etre inferieure a l'indemnite legale de licenciement. Si la convention collective prevoit une indemnite de licenciement superieure a l'indemnite legale, c'est ce montant conventionnel qui sert de plancher.",
+    "details": [
+      { "critere": "Plancher", "valeur": "= Indemnite legale de licenciement (minimum)", "reference": "L1237-13" },
+      { "critere": "Si convention plus favorable", "valeur": "= Indemnite conventionnelle de licenciement", "reference": "L1237-13" },
+      { "critere": "Anciennete requise", "valeur": "8 mois (comme licenciement)", "reference": "L1237-13 / L1234-9" },
+      { "critere": "Homologation", "valeur": "DREETS (ex-Direccte), delai 15 jours", "reference": "L1237-14" }
+    ]
+  },
+
+  "conges_payes": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Droit legal : 2,5 jours ouvrables par mois de travail effectif, soit 30 jours ouvrables (5 semaines) pour une annee complete. Periode de reference : 1er juin au 31 mai. Conge principal : 4 semaines (24 jours) dont 12 jours continus minimum entre le 1er mai et le 31 octobre. Jours de fractionnement : 1 jour supplementaire si 3-5 jours hors periode, 2 jours si 6 jours ou plus.",
+    "details": [
+      { "critere": "Droit annuel", "valeur": "2,5 jours ouvrables / mois (30 jours / an)", "reference": "L3141-3" },
+      { "critere": "Conge principal", "valeur": "24 jours ouvrables maximum continus", "reference": "L3141-17" },
+      { "critere": "Fraction continue minimale", "valeur": "12 jours ouvrables (2 semaines)", "reference": "L3141-18" },
+      { "critere": "Jours de fractionnement", "valeur": "1 ou 2 jours supplementaires hors 1er mai-31 oct", "reference": "L3141-23" },
+      { "critere": "Periode legale", "valeur": "1er mai au 31 octobre", "reference": "L3141-13" }
+    ]
+  },
+
+  "evenements_familiaux": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Conges pour evenements familiaux prevus par le Code du travail (jours ouvrables, sur justificatif, sans condition d'anciennete). Ces jours n'entrainent pas de reduction de salaire.",
+    "details": [
+      { "critere": "Mariage / PACS du salarie", "valeur": "4 jours", "reference": "L3142-4" },
+      { "critere": "Mariage d'un enfant", "valeur": "1 jour", "reference": "L3142-4" },
+      { "critere": "Naissance ou adoption", "valeur": "3 jours", "reference": "L3142-4" },
+      { "critere": "Deces du conjoint / partenaire PACS / concubin", "valeur": "3 jours", "reference": "L3142-4" },
+      { "critere": "Deces d'un enfant", "valeur": "12 jours (+ 8 j si enfant < 25 ans)", "reference": "L3142-4" },
+      { "critere": "Deces pere / mere", "valeur": "3 jours", "reference": "L3142-4" },
+      { "critere": "Deces frere / soeur", "valeur": "3 jours", "reference": "L3142-4" },
+      { "critere": "Deces beau-pere / belle-mere", "valeur": "3 jours", "reference": "L3142-4" },
+      { "critere": "Annonce handicap / maladie grave enfant", "valeur": "5 jours", "reference": "L3142-4" }
+    ]
+  },
+
+  "durees_travail": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Duree legale du travail : 35 heures par semaine. Duree maximale quotidienne : 10 heures (derogation possible a 12h par accord). Duree maximale hebdomadaire : 48 heures sur une semaine, 44 heures en moyenne sur 12 semaines consecutives (derogation possible a 46h par accord). Repos quotidien minimum : 11 heures consecutives. Repos hebdomadaire : 24 heures + 11 heures = 35 heures consecutives.",
+    "details": [
+      { "critere": "Duree legale hebdomadaire", "valeur": "35 heures", "reference": "L3121-27" },
+      { "critere": "Duree maximale quotidienne", "valeur": "10 heures (12h par accord)", "reference": "L3121-18" },
+      { "critere": "Maximum hebdomadaire absolu", "valeur": "48 heures", "reference": "L3121-20" },
+      { "critere": "Maximum moyen sur 12 semaines", "valeur": "44 heures (46h par accord)", "reference": "L3121-22" },
+      { "critere": "Repos quotidien", "valeur": "11 heures consecutives", "reference": "L3131-1" },
+      { "critere": "Repos hebdomadaire", "valeur": "35 heures consecutives (24h + 11h)", "reference": "L3132-2" }
+    ]
+  },
+
+  "heures_supplementaires": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Heures au-dela de 35h/semaine. Majoration legale : 25 % pour les 8 premieres heures supplementaires (36e a 43e heure), puis 50 % pour les suivantes (a partir de la 44e heure). Un accord de branche ou d'entreprise peut fixer un taux different, avec un minimum de 10 %. Contingent annuel legal : 220 heures (au-dela : repos compensateur obligatoire).",
+    "details": [
+      { "critere": "Seuil de declenchement", "valeur": "Au-dela de 35h / semaine", "reference": "L3121-28" },
+      { "critere": "36e a 43e heure", "valeur": "+25 %", "reference": "L3121-36" },
+      { "critere": "A partir de la 44e heure", "valeur": "+50 %", "reference": "L3121-36" },
+      { "critere": "Taux minimum (par accord)", "valeur": "10 %", "reference": "L3121-33" },
+      { "critere": "Contingent annuel", "valeur": "220 heures", "reference": "D3121-24" },
+      { "critere": "Au-dela du contingent", "valeur": "Repos compensateur obligatoire (100 %)", "reference": "L3121-30" }
+    ]
+  },
+
+  "majoration_nuit": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Le travail de nuit (21h-6h ou plage definie par accord) n'entraine pas de majoration salariale legale obligatoire. Le Code du travail prevoit uniquement des contreparties sous forme de repos compensateur, dont la duree est fixee par accord collectif. La duree maximale quotidienne est de 8 heures, hebdomadaire de 40 heures sur 12 semaines.",
+    "details": [
+      { "critere": "Plage de nuit legale", "valeur": "21h a 6h (ou accord : 9h entre 21h et 7h)", "reference": "L3122-2" },
+      { "critere": "Majoration salariale legale", "valeur": "Pas de taux legal — fixe par accord", "reference": "L3122-8" },
+      { "critere": "Contrepartie obligatoire", "valeur": "Repos compensateur (duree fixee par accord)", "reference": "L3122-8" },
+      { "critere": "Duree max quotidienne", "valeur": "8 heures (derogation possible)", "reference": "L3122-6" },
+      { "critere": "Duree max hebdomadaire", "valeur": "40 heures / 12 semaines", "reference": "L3122-7" }
+    ]
+  },
+
+  "majoration_dimanche": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Le repos dominical est le principe legal. Pas de majoration salariale legale obligatoire pour le travail du dimanche de droit commun. Exceptions : dans les zones touristiques internationales (ZTI), zones commerciales et zones touristiques, la majoration conventionnelle doit etre au moins egale au double de la remuneration normalement due. Pour les commerces alimentaires (ouverture jusqu'a 13h), les salaries prives de repos dominical beneficient d'un repos compensateur et d'une remuneration majoree.",
+    "details": [
+      { "critere": "Principe", "valeur": "Repos dominical obligatoire", "reference": "L3132-3" },
+      { "critere": "Majoration legale (droit commun)", "valeur": "Pas de majoration legale", "reference": "L3132-3" },
+      { "critere": "ZTI / Zones touristiques", "valeur": "Doublement minimum (accord obligatoire)", "reference": "L3132-25-3" },
+      { "critere": "Commerce alimentaire (< 13h)", "valeur": "Repos compensateur + majoration de 30 %", "reference": "L3132-13" }
+    ]
+  },
+
+  "majoration_ferie": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "11 jours feries legaux par an. Seul le 1er mai est obligatoirement chome et paye : s'il est travaille, la remuneration est doublee. Les 10 autres jours feries ne donnent lieu a aucune majoration legale obligatoire (sauf dispositions conventionnelles). Le chomage des jours feries ne peut entrainer de perte de salaire pour les salaries ayant 3 mois d'anciennete.",
+    "details": [
+      { "critere": "Nombre de jours feries legaux", "valeur": "11 jours par an", "reference": "L3133-1" },
+      { "critere": "1er mai travaille", "valeur": "Majoration de 100 % (salaire double)", "reference": "L3133-6" },
+      { "critere": "Autres jours feries travailles", "valeur": "Pas de majoration legale", "reference": "L3133-1" },
+      { "critere": "Jour ferie chome", "valeur": "Maintien du salaire si 3 mois d'anciennete", "reference": "L3133-3" }
+    ]
+  },
+
+  "forfait_jours": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Le forfait en jours sur l'annee est reserve aux cadres autonomes et salaries dont la duree du travail ne peut etre predeterminee. Un accord collectif est obligatoire. Maximum legal : 218 jours travailles par an. Le salarie doit beneficier d'un entretien annuel sur sa charge de travail, l'organisation et l'articulation vie professionnelle/personnelle. Repos quotidien de 11h et hebdomadaire de 35h doivent etre respectes.",
+    "details": [
+      { "critere": "Public eligible", "valeur": "Cadres autonomes + salaries autonomes", "reference": "L3121-58" },
+      { "critere": "Accord collectif", "valeur": "Obligatoire", "reference": "L3121-63" },
+      { "critere": "Maximum annuel", "valeur": "218 jours", "reference": "L3121-64" },
+      { "critere": "Depassement possible", "valeur": "Accord ecrit, max 235 jours, + 10 % min", "reference": "L3121-59" },
+      { "critere": "Entretien annuel", "valeur": "Obligatoire (charge de travail)", "reference": "L3121-65" }
+    ]
+  },
+
+  "temps_partiel": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Duree minimale legale : 24 heures par semaine (sauf demande du salarie, etudiants, ou accord de branche). Heures complementaires majorees : +10 % dans la limite de 1/10e de la duree contractuelle, +25 % entre 1/10e et 1/3. La remuneration est proportionnelle a celle d'un salarie a temps complet occupant un emploi equivalent. Egalite de droits avec les salaries a temps plein.",
+    "details": [
+      { "critere": "Duree minimale", "valeur": "24 heures / semaine", "reference": "L3123-7" },
+      { "critere": "Heures complementaires (0 a 1/10e)", "valeur": "+10 %", "reference": "L3123-29" },
+      { "critere": "Heures complementaires (1/10e a 1/3)", "valeur": "+25 %", "reference": "L3123-29" },
+      { "critere": "Limite des heures complementaires", "valeur": "1/3 de la duree contractuelle", "reference": "L3123-28" },
+      { "critere": "Coupure quotidienne", "valeur": "1 seule coupure (sauf accord)", "reference": "L3123-30" }
+    ]
+  },
+
+  "amenagement_temps_travail": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "L'amenagement du temps de travail sur une periode superieure a la semaine necessite un accord collectif. A defaut d'accord, l'employeur peut organiser le temps de travail sur 4 ou 9 semaines maximum. Annualisation : la duree hebdomadaire peut varier sur tout ou partie de l'annee sans depasser 1 607 heures annuelles (equivalent 35h). Les heures supplementaires sont decomptes a la fin de la periode de reference.",
+    "details": [
+      { "critere": "Principe", "valeur": "Accord collectif necessaire", "reference": "L3121-44" },
+      { "critere": "A defaut d'accord", "valeur": "4 semaines (< 50 salaries) ou 9 semaines", "reference": "D3121-27" },
+      { "critere": "Plafond annuel", "valeur": "1 607 heures", "reference": "L3121-41" },
+      { "critere": "Heures supplementaires", "valeur": "Decompte en fin de periode de reference", "reference": "L3121-41" }
+    ]
+  },
+
+  "cet": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Le Compte Epargne-Temps (CET) n'est pas un droit legal automatique : il doit etre mis en place par accord collectif (branche ou entreprise). Il permet d'accumuler des droits a conge remunere ou de beneficier d'une remuneration en contrepartie de periodes de conge ou de repos non prises. Les droits acquis sont garantis par l'AGS en cas de liquidation judiciaire.",
+    "details": [
+      { "critere": "Mise en place", "valeur": "Accord collectif obligatoire", "reference": "L3151-1" },
+      { "critere": "Alimentation", "valeur": "Conges non pris, RTT, primes, heures sup", "reference": "L3152-1" },
+      { "critere": "Utilisation", "valeur": "Conge remunere ou monetisation", "reference": "L3153-1" },
+      { "critere": "Garantie", "valeur": "AGS en cas de liquidation", "reference": "L3154-2" },
+      { "critere": "Transfert", "valeur": "Possible vers PERCO ou regime de retraite", "reference": "L3153-3" }
+    ]
+  },
+
+  "maladie": {
+    "comparable": true,
+    "needs_calculation": true,
+    "resume": "Maintien de salaire par l'employeur en cas de maladie (complement aux IJSS) : apres 7 jours de carence, pendant 30 jours a 90 % du salaire brut, puis 30 jours a 66,66 %. Conditions : 1 an d'anciennete, arret justifie, prise en charge par la Securite sociale. Duree augmentee de 10 jours par tranche de 5 ans d'anciennete (au-dela d'un an), dans la limite de 90 jours a 90 % et 90 jours a 66,66 %.",
+    "details": [
+      { "critere": "Anciennete requise", "valeur": "1 an", "reference": "L1226-1 / D1226-1" },
+      { "critere": "Delai de carence", "valeur": "7 jours", "reference": "D1226-3" },
+      { "critere": "30 premiers jours", "valeur": "90 % du salaire brut", "reference": "D1226-1" },
+      { "critere": "30 jours suivants", "valeur": "66,66 % du salaire brut", "reference": "D1226-1" },
+      { "critere": "Augmentation par anciennete", "valeur": "+10 jours par tranche de 5 ans", "reference": "D1226-2" },
+      { "critere": "Maximum", "valeur": "90 jours a 90 % + 90 jours a 66,66 %", "reference": "D1226-2" }
+    ]
+  },
+
+  "accident_travail": {
+    "comparable": true,
+    "needs_calculation": true,
+    "resume": "Maintien de salaire en cas d'accident du travail ou maladie professionnelle : identique a la maladie ordinaire SAUF pas de delai de carence (indemnisation des le 1er jour d'arret). IJSS versees par la CPAM : 60 % du salaire journalier de base les 28 premiers jours, puis 80 % a partir du 29e jour. L'employeur complete selon les memes regles que la maladie (1 an d'anciennete, 90 % puis 66,66 %).",
+    "details": [
+      { "critere": "Delai de carence", "valeur": "Aucun (indemnise des le 1er jour)", "reference": "L433-1 CSS" },
+      { "critere": "IJSS — 28 premiers jours", "valeur": "60 % du salaire journalier", "reference": "L433-2 CSS" },
+      { "critere": "IJSS — A partir du 29e jour", "valeur": "80 % du salaire journalier", "reference": "L433-2 CSS" },
+      { "critere": "Complement employeur (condition)", "valeur": "1 an d'anciennete", "reference": "D1226-1" },
+      { "critere": "Complement employeur", "valeur": "90 % puis 66,66 % (memes durees que maladie)", "reference": "D1226-1" },
+      { "critere": "Protection contre licenciement", "valeur": "Pendant toute la duree de l'arret", "reference": "L1226-9" }
+    ]
+  },
+
+  "maternite_paternite": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Conge maternite : 16 semaines (6 avant + 10 apres) pour les 2 premiers enfants, 26 semaines a partir du 3e enfant, 34 semaines (jumeaux), 46 semaines (triples ou plus). Conge paternite : 25 jours calendaires (32 si naissances multiples), dont 4 jours obligatoires immediatement apres la naissance. Conge d'adoption : 16 semaines. Indemnisation : IJSS a 100 % du salaire journalier (plafond Securite sociale).",
+    "details": [
+      { "critere": "Maternite — 1er ou 2e enfant", "valeur": "16 semaines (6 + 10)", "reference": "L1225-17" },
+      { "critere": "Maternite — 3e enfant ou plus", "valeur": "26 semaines (8 + 18)", "reference": "L1225-17" },
+      { "critere": "Maternite — Jumeaux", "valeur": "34 semaines (12 + 22)", "reference": "L1225-17" },
+      { "critere": "Maternite — Triples ou plus", "valeur": "46 semaines (24 + 22)", "reference": "L1225-17" },
+      { "critere": "Paternite / second parent", "valeur": "25 jours (32 si multiples)", "reference": "L1225-35" },
+      { "critere": "Paternite — Fraction obligatoire", "valeur": "4 jours immediatement apres naissance", "reference": "L1225-35" },
+      { "critere": "Adoption", "valeur": "16 semaines", "reference": "L1225-37" }
+    ]
+  },
+
+  "cotisation_mutuelle": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Depuis le 1er janvier 2016, tout employeur du secteur prive doit proposer une complémentaire sante collective a ses salaries. La participation de l'employeur doit couvrir au moins 50 % de la cotisation du salarie. Le panier de soins minimum (ANI) comprend : ticket moderateur, forfait journalier hospitalier, soins dentaires (125 % BRSS), optique (forfait 100-200 EUR selon correction).",
+    "details": [
+      { "critere": "Obligation employeur", "valeur": "Couverture complementaire sante obligatoire", "reference": "L911-7 CSS" },
+      { "critere": "Part employeur minimale", "valeur": "50 % de la cotisation", "reference": "D911-1 CSS" },
+      { "critere": "Panier de soins minimum", "valeur": "ANI : ticket moderateur, hospitalier, dentaire, optique", "reference": "D911-1 CSS" },
+      { "critere": "Dispense possible", "valeur": "CDD < 3 mois, temps partiel, mutuelle individuelle", "reference": "D911-2 CSS" }
+    ]
+  },
+
+  "cotisation_prevoyance": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "La Convention Collective Nationale de 1947 impose aux employeurs de financer une prevoyance deces pour les cadres a hauteur de 1,50 % de la tranche A (plafond Securite sociale). Il n'existe pas d'obligation legale generale de prevoyance pour les non-cadres (sauf convention collective). Depuis 2019, le regime unifie Agirc-Arrco a maintenu cette obligation pour les cadres et assimiles.",
+    "details": [
+      { "critere": "Cadres — Prevoyance deces", "valeur": "1,50 % de la tranche A (TA)", "reference": "CCN 1947 art. 7" },
+      { "critere": "Cadres — Financement", "valeur": "100 % a la charge de l'employeur", "reference": "CCN 1947 art. 7" },
+      { "critere": "Non-cadres", "valeur": "Pas d'obligation legale (sauf CCN)", "reference": "-" },
+      { "critere": "Portabilite", "valeur": "12 mois apres rupture du contrat", "reference": "L911-8 CSS" }
+    ]
+  },
+
+  "cotisation_retraite": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Regime de base Securite sociale : cotisation sur la totalite du salaire (plafonné et deplafonné). Regime complementaire Agirc-Arrco (obligatoire) : Tranche 1 (jusqu'au plafond SS) a 7,87 % dont 60 % employeur ; Tranche 2 (au-dela) a 21,59 % dont 60 % employeur. Contribution d'equilibre general (CEG) et contribution d'equilibre technique (CET) s'ajoutent.",
+    "details": [
+      { "critere": "Agirc-Arrco — Tranche 1", "valeur": "7,87 % (4,72 % employeur + 3,15 % salarie)", "reference": "ANI Agirc-Arrco" },
+      { "critere": "Agirc-Arrco — Tranche 2", "valeur": "21,59 % (12,95 % employeur + 8,64 % salarie)", "reference": "ANI Agirc-Arrco" },
+      { "critere": "CEG — Tranche 1", "valeur": "2,15 % (1,29 % employeur + 0,86 % salarie)", "reference": "ANI Agirc-Arrco" },
+      { "critere": "CEG — Tranche 2", "valeur": "2,70 % (1,62 % employeur + 1,08 % salarie)", "reference": "ANI Agirc-Arrco" },
+      { "critere": "Repartition", "valeur": "60 % employeur / 40 % salarie", "reference": "ANI Agirc-Arrco" }
+    ]
+  },
+
+  "paritarisme_financement": {
+    "comparable": false,
+    "needs_calculation": false,
+    "resume": "Le financement du paritarisme et du dialogue social de branche releve exclusivement de la negociation collective. Le Code du travail definit le cadre general de la negociation de branche mais ne fixe pas de contributions paritaires par defaut.",
+    "details": []
+  },
+
+  "apprenti": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Remuneration minimale legale de l'apprenti : pourcentage du SMIC (ou du salaire minimum conventionnel si superieur) selon l'age et l'annee d'apprentissage. Le contrat d'apprentissage est conclu pour une duree de 6 mois a 3 ans. L'apprenti beneficie des memes droits que les autres salaries (conges, protection sociale, etc.).",
+    "details": [
+      { "critere": "16-17 ans — 1re annee", "valeur": "27 % du SMIC", "reference": "D6222-26" },
+      { "critere": "16-17 ans — 2e annee", "valeur": "39 % du SMIC", "reference": "D6222-26" },
+      { "critere": "16-17 ans — 3e annee", "valeur": "55 % du SMIC", "reference": "D6222-26" },
+      { "critere": "18-20 ans — 1re annee", "valeur": "43 % du SMIC", "reference": "D6222-26" },
+      { "critere": "18-20 ans — 2e annee", "valeur": "51 % du SMIC", "reference": "D6222-26" },
+      { "critere": "18-20 ans — 3e annee", "valeur": "67 % du SMIC", "reference": "D6222-26" },
+      { "critere": "21-25 ans — 1re annee", "valeur": "53 % du SMIC", "reference": "D6222-26" },
+      { "critere": "21-25 ans — 2e annee", "valeur": "61 % du SMIC", "reference": "D6222-26" },
+      { "critere": "21-25 ans — 3e annee", "valeur": "78 % du SMIC", "reference": "D6222-26" },
+      { "critere": "26 ans et plus", "valeur": "100 % du SMIC (ou SMC si superieur)", "reference": "D6222-26" }
+    ]
+  },
+
+  "contrat_professionnalisation": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Remuneration minimale legale du contrat de professionnalisation : pourcentage du SMIC selon l'age et le niveau de qualification. Duree : 6 a 12 mois (jusqu'a 36 mois dans certains cas). Le titulaire beneficie de l'ensemble des dispositions applicables aux autres salaries de l'entreprise.",
+    "details": [
+      { "critere": "16-20 ans — Sans bac", "valeur": "55 % du SMIC", "reference": "D6325-14" },
+      { "critere": "16-20 ans — Bac ou plus", "valeur": "65 % du SMIC", "reference": "D6325-14" },
+      { "critere": "21-25 ans — Sans bac", "valeur": "70 % du SMIC", "reference": "D6325-14" },
+      { "critere": "21-25 ans — Bac ou plus", "valeur": "80 % du SMIC", "reference": "D6325-14" },
+      { "critere": "26 ans et plus", "valeur": "100 % du SMIC (ou 85 % du SMC)", "reference": "D6325-15" },
+      { "critere": "Duree", "valeur": "6 a 12 mois (36 mois max par accord)", "reference": "L6325-11" }
+    ]
+  },
+
+  "stagiaire": {
+    "comparable": true,
+    "needs_calculation": false,
+    "resume": "Gratification obligatoire pour les stages de plus de 2 mois (consecutifs ou non) au cours d'une meme annee scolaire. Montant minimum : 15 % du plafond horaire de la Securite sociale, soit environ 4,35 EUR/heure (2026). Le stagiaire beneficie du repos, des conges, de la protection contre le harcelement et l'acces au restaurant d'entreprise. Duree maximale : 6 mois par organisme d'accueil et par annee.",
+    "details": [
+      { "critere": "Gratification obligatoire", "valeur": "Si stage > 2 mois (consecutifs ou non)", "reference": "L124-6 Code Education" },
+      { "critere": "Montant minimum", "valeur": "15 % du plafond horaire SS (~4,35 EUR/h)", "reference": "L124-6 Code Education" },
+      { "critere": "Duree maximale", "valeur": "6 mois par organisme et par annee", "reference": "L124-5 Code Education" },
+      { "critere": "Droits", "valeur": "Repos, conges, restaurant d'entreprise, transport", "reference": "L124-13 Code Education" },
+      { "critere": "Quota de stagiaires", "valeur": "Max 15 % de l'effectif (ou 3 minimum)", "reference": "R124-10 Code Education" }
+    ]
+  },
+
+  "classification": {
+    "comparable": false,
+    "needs_calculation": false,
+    "resume": "La classification des emplois releve exclusivement de la negociation collective de branche. Le Code du travail ne definit pas de grille de classification par defaut. Chaque branche professionnelle etablit sa propre hierarchie des emplois, coefficients et niveaux.",
+    "details": []
+  },
+
+  "grille_remuneration": {
+    "comparable": false,
+    "needs_calculation": false,
+    "resume": "Les grilles de remuneration sont definies par la negociation de branche. Le seul plancher legal est le SMIC (Salaire Minimum Interprofessionnel de Croissance). Les minima conventionnels ne peuvent etre inferieurs au SMIC.",
+    "details": [
+      { "critere": "Plancher legal (SMIC 2026)", "valeur": "11,88 EUR/h brut (estimation)", "reference": "L3231-2" }
+    ]
+  },
+
+  "primes_indemnites_avantages": {
+    "comparable": false,
+    "needs_calculation": false,
+    "resume": "Les primes, indemnites et avantages relevent essentiellement de la negociation collective, du contrat de travail ou des usages d'entreprise. Le Code du travail ne prevoit pas de primes obligatoires en dehors des indemnites specifiques (licenciement, precarite, etc.) traitees dans leurs sections respectives.",
+    "details": []
+  }
+}
