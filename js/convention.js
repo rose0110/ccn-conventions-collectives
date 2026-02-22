@@ -312,7 +312,6 @@ function renderPrintCover(nom, idcc) {
     <div style="width:50px;height:3px;background:#42D80F;border-radius:2px;margin-bottom:35px;"></div>
     <div style="font-size:12px;color:#7a7e8a;margin-bottom:8px;">Synth\u00e8se g\u00e9n\u00e9r\u00e9e le ${date}</div>
     <div style="margin-top:60px;font-size:12px;font-weight:700;color:#42D80F;letter-spacing:0.12em;">SMART DATA PAY</div>
-    <div style="font-size:10px;color:#a0a4b0;margin-top:4px;">Donn\u00e9es extraites et structur\u00e9es par IA</div>
   `;
 }
 
