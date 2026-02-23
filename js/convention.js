@@ -34,17 +34,24 @@ function detectIframeMode() {
 
 /**
  * Positionne les elements flottants (bouton menu, action-bar) en mode iframe.
- * Utilise un requestAnimationFrame loop avec getBoundingClientRect
- * pour calculer la zone visible de l'iframe dans le viewport du navigateur.
+ *
+ * Probleme : dans un iframe dimensionne a la hauteur du contenu (~30000px),
+ * window.innerHeight = hauteur de l'iframe (pas du viewport visible),
+ * position:fixed = fixe dans l'iframe (pas dans le viewport), et
+ * getBoundingClientRect().top = 0 (pas de scroll interne).
+ *
+ * Solution : utiliser IntersectionObserver qui retourne les coordonnees
+ * par rapport au VRAI viewport du navigateur (meme cross-origin).
  */
 function setupIframeFloatingElements() {
-  // Attendre que le DOM soit pret
   setTimeout(function() {
     var tocBtn = document.getElementById('mobile-toc-toggle');
     var actionBar = document.querySelector('.action-bar');
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('toc-overlay');
     if (!tocBtn || !actionBar) return;
 
-    // Forcer les elements en position absolute (pas fixed, car fixed = iframe viewport = tout le contenu)
+    // Preparer les elements flottants
     tocBtn.style.position = 'absolute';
     tocBtn.style.display = 'flex';
     tocBtn.style.zIndex = '60';
@@ -57,7 +64,6 @@ function setupIframeFloatingElements() {
     actionBar.style.borderBottom = 'none';
     actionBar.style.boxShadow = '0 -2px 12px rgba(0,0,0,0.08)';
 
-    // Cacher le titre pour gagner de la place
     var titleEl = actionBar.querySelector('.action-bar-title');
     if (titleEl) titleEl.style.display = 'none';
     var btnsEl = actionBar.querySelector('.action-btns');
@@ -66,54 +72,68 @@ function setupIframeFloatingElements() {
       btnsEl.style.justifyContent = 'center';
     }
 
-    // Recuperer la sidebar et l'overlay
-    var sidebar = document.getElementById('sidebar');
-    var overlay = document.getElementById('toc-overlay');
+    // Creer un element sentinelle couvrant tout le document
+    // L'IntersectionObserver nous donne sa boundingClientRect par rapport au viewport reel
+    var sentinel = document.createElement('div');
+    sentinel.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:100%;pointer-events:none;visibility:hidden;';
+    document.body.appendChild(sentinel);
 
-    // Stocker les valeurs visibles pour usage par openSidebarIframe
-    var iframeVisibleTop = 0;
-    var iframeVisibleHeight = 0;
+    var visibleTop = 0;
+    var visibleBottom = 800;
 
-    // Le scroll vient du parent — on recalcule la position visible a chaque frame
-    function updateFloatingPositions() {
-      // getBoundingClientRect() dans une iframe retourne les coords par rapport au viewport du navigateur
-      var docRect = document.documentElement.getBoundingClientRect();
-      var vh = window.innerHeight || document.documentElement.clientHeight;
+    // IntersectionObserver avec threshold granulaire pour updates frequents
+    var thresholds = [];
+    for (var i = 0; i <= 100; i++) thresholds.push(i / 100);
 
-      // Zone visible de l'iframe dans le viewport du navigateur
-      var visibleTop = Math.max(0, -docRect.top);
-      var visibleBottom = Math.min(docRect.height, -docRect.top + vh);
-      iframeVisibleTop = visibleTop;
-      iframeVisibleHeight = visibleBottom - visibleTop;
+    var observer = new IntersectionObserver(function(entries) {
+      var entry = entries[0];
+      if (!entry) return;
 
-      // Positionner le bouton TOC en bas a droite de la zone visible
+      // entry.boundingClientRect = position de la sentinelle dans le viewport reel
+      // entry.rootBounds = viewport du navigateur (ou null en cross-origin)
+      var rect = entry.boundingClientRect;
+      var rootH = entry.rootBounds ? entry.rootBounds.height : (window.visualViewport ? window.visualViewport.height : 800);
+
+      // La sentinelle couvre tout le doc. Sa position top dans le viewport nous dit
+      // combien le document est scrolle.
+      // visibleTop dans le document = max(0, -rect.top)
+      // visibleBottom dans le document = min(rect.height, -rect.top + rootH)
+      visibleTop = Math.max(0, -rect.top);
+      visibleBottom = Math.min(rect.height, -rect.top + rootH);
+    }, { threshold: thresholds });
+
+    observer.observe(sentinel);
+
+    // Repositionner les elements a chaque frame
+    function updatePositions() {
+      var viewH = visibleBottom - visibleTop;
+      if (viewH < 100) viewH = 800; // fallback
+
       tocBtn.style.top = (visibleBottom - 120) + 'px';
       tocBtn.style.left = 'auto';
       tocBtn.style.right = '20px';
       tocBtn.style.bottom = 'auto';
 
-      // Positionner la barre d'actions en bas de la zone visible
       actionBar.style.top = (visibleBottom - actionBar.offsetHeight) + 'px';
       actionBar.style.bottom = 'auto';
 
-      // Repositionner la sidebar et l'overlay SEULEMENT quand ouverts
       if (sidebar && sidebar.classList.contains('open')) {
         sidebar.style.top = visibleTop + 'px';
-        sidebar.style.height = iframeVisibleHeight + 'px';
+        sidebar.style.height = viewH + 'px';
       }
       if (overlay && overlay.classList.contains('visible')) {
         overlay.style.position = 'absolute';
         overlay.style.top = visibleTop + 'px';
         overlay.style.left = '0';
         overlay.style.right = '0';
-        overlay.style.height = iframeVisibleHeight + 'px';
+        overlay.style.height = viewH + 'px';
       }
 
-      requestAnimationFrame(updateFloatingPositions);
+      requestAnimationFrame(updatePositions);
     }
 
-    requestAnimationFrame(updateFloatingPositions);
-    console.log('Convention: iframe floating elements initialises');
+    requestAnimationFrame(updatePositions);
+    console.log('Convention: iframe floating elements (IntersectionObserver) initialises');
   }, 500);
 }
 
