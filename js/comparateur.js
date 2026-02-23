@@ -122,19 +122,21 @@ function renderComparePanel(sectionKey, conventionSection) {
   return `
     <div class="compare-panel compare-panel--hidden" id="compare-${sectionKey}" data-section="${sectionKey}">
       <div class="compare-header">
-        <div class="compare-header-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3v18"></path>
-            <path d="M3 12h18"></path>
-            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-          </svg>
-          Comparaison avec le Code du travail
+        <div class="compare-header-row">
+          <div class="compare-header-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v18"></path>
+              <path d="M3 12h18"></path>
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            Comparaison avec le Code du travail
+          </div>
+          ${calcButton}
+          <button class="btn-compare-close" onclick="toggleComparePanel('${sectionKey}')" title="Fermer">&times;</button>
         </div>
         <div class="compare-verdict" id="${verdictId}"></div>
-        ${calcButton}
-        <button class="btn-compare-close" onclick="toggleComparePanel('${sectionKey}')" title="Fermer">&times;</button>
       </div>
       <div class="compare-columns">
         <div class="compare-col compare-col--convention">
@@ -264,8 +266,16 @@ ${ref.details ? ref.details.map(d => `- ${d.critere} : ${d.valeur} (${d.referenc
 4. Reponds avec un JSON strict :
 {
   "verdict": "plus_favorable" | "identique" | "moins_favorable",
-  "explication": "Explication courte (2-4 phrases max)"
+  "resume": "Phrase de synthese globale (1 phrase max)",
+  "points": [
+    { "label": "Nom du critere", "detail": "Ce que prevoit la convention", "favorable": true|false|null }
+  ]
 }
+
+Regles pour "points" :
+- Liste 3 a 6 criteres concrets de comparaison (durees, montants, conditions, etc.)
+- "favorable" = true si plus favorable, false si moins favorable, null si identique ou non comparable
+- "detail" = 1 phrase courte et factuelle
 
 IMPORTANT : Ne reponds QUE avec le JSON, sans aucun texte avant ou apres, sans bloc markdown.`;
 
@@ -294,7 +304,7 @@ IMPORTANT : Ne reponds QUE avec le JSON, sans aucun texte avant ou apres, sans b
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const result = JSON.parse(jsonMatch[0]);
-      displayVerdict(sectionKey, result.verdict, result.explication);
+      displayVerdict(sectionKey, result);
     } else {
       throw new Error('Reponse JSON invalide');
     }
@@ -316,20 +326,45 @@ IMPORTANT : Ne reponds QUE avec le JSON, sans aucun texte avant ou apres, sans b
 
 // ===== AFFICHAGE DU VERDICT =====
 
-function displayVerdict(sectionKey, verdict, explication) {
+function displayVerdict(sectionKey, result) {
   const verdictEl = document.getElementById(`verdict-${sectionKey}`);
   if (!verdictEl) return;
 
   const VERDICTS = {
-    'plus_favorable':  { label: 'Plus favorable',  css: 'verdict--plus' },
-    'identique':       { label: 'Identique',       css: 'verdict--identique' },
-    'moins_favorable': { label: 'Moins favorable',  css: 'verdict--moins' },
+    'plus_favorable':  { label: 'Plus favorable',  css: 'verdict--plus',  icon: '\u2705' },
+    'identique':       { label: 'Identique',       css: 'verdict--identique', icon: '\u2194\uFE0F' },
+    'moins_favorable': { label: 'Moins favorable', css: 'verdict--moins', icon: '\u26A0\uFE0F' },
   };
 
-  const v = VERDICTS[verdict] || { label: 'Non d\u00e9termin\u00e9', css: 'verdict--unknown' };
+  const v = VERDICTS[result.verdict] || { label: 'Non d\u00e9termin\u00e9', css: 'verdict--unknown', icon: '\u2753' };
 
-  verdictEl.innerHTML = `
-    <span class="verdict-badge ${v.css}">${v.label}</span>
-    ${explication ? `<span class="verdict-detail">${escapeHtml(explication)}</span>` : ''}
-  `;
+  // Badge verdict
+  let html = `<span class="verdict-badge ${v.css}">${v.label}</span>`;
+
+  // Resume
+  if (result.resume) {
+    html += `<div class="verdict-resume">${escapeHtml(result.resume)}</div>`;
+  }
+
+  // Fallback : ancien format avec "explication" (string simple)
+  if (!result.points && result.explication) {
+    html += `<div class="verdict-resume">${escapeHtml(result.explication)}</div>`;
+  }
+
+  // Points de comparaison structures
+  if (result.points && result.points.length > 0) {
+    html += '<div class="verdict-points">';
+    for (const pt of result.points) {
+      var ptIcon = pt.favorable === true ? '\u2705' : pt.favorable === false ? '\u274C' : '\u2796';
+      var ptClass = pt.favorable === true ? 'vp--plus' : pt.favorable === false ? 'vp--moins' : 'vp--neutre';
+      html += `<div class="verdict-point ${ptClass}">`;
+      html += `<span class="vp-icon">${ptIcon}</span>`;
+      html += `<span class="vp-label">${escapeHtml(pt.label)}</span>`;
+      html += `<span class="vp-detail">${escapeHtml(pt.detail)}</span>`;
+      html += `</div>`;
+    }
+    html += '</div>';
+  }
+
+  verdictEl.innerHTML = html;
 }
