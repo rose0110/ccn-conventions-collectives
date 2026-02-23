@@ -66,23 +66,25 @@ function setupIframeFloatingElements() {
       btnsEl.style.justifyContent = 'center';
     }
 
-    // Recuperer la sidebar pour la repositionner aussi
+    // Recuperer la sidebar et l'overlay
     var sidebar = document.getElementById('sidebar');
     var overlay = document.getElementById('toc-overlay');
+
+    // Stocker les valeurs visibles pour usage par openSidebarIframe
+    var iframeVisibleTop = 0;
+    var iframeVisibleHeight = 0;
 
     // Le scroll vient du parent — on recalcule la position visible a chaque frame
     function updateFloatingPositions() {
       // getBoundingClientRect() dans une iframe retourne les coords par rapport au viewport du navigateur
-      // documentElement.getBoundingClientRect().top = combien le haut du doc iframe est decale vs le viewport
       var docRect = document.documentElement.getBoundingClientRect();
-      // viewportHeight = hauteur visible du navigateur
       var vh = window.innerHeight || document.documentElement.clientHeight;
 
-      // La zone visible de l'iframe dans le navigateur :
-      // - haut visible = max(0, -docRect.top)
-      // - bas visible = min(docRect.height, -docRect.top + vh)
+      // Zone visible de l'iframe dans le viewport du navigateur
       var visibleTop = Math.max(0, -docRect.top);
       var visibleBottom = Math.min(docRect.height, -docRect.top + vh);
+      iframeVisibleTop = visibleTop;
+      iframeVisibleHeight = visibleBottom - visibleTop;
 
       // Positionner le bouton TOC en bas a droite de la zone visible
       tocBtn.style.top = (visibleBottom - 120) + 'px';
@@ -94,17 +96,17 @@ function setupIframeFloatingElements() {
       actionBar.style.top = (visibleBottom - actionBar.offsetHeight) + 'px';
       actionBar.style.bottom = 'auto';
 
-      // Repositionner la sidebar et l'overlay dans la zone visible
-      if (sidebar) {
+      // Repositionner la sidebar et l'overlay SEULEMENT quand ouverts
+      if (sidebar && sidebar.classList.contains('open')) {
         sidebar.style.top = visibleTop + 'px';
-        sidebar.style.height = (visibleBottom - visibleTop) + 'px';
+        sidebar.style.height = iframeVisibleHeight + 'px';
       }
-      if (overlay) {
+      if (overlay && overlay.classList.contains('visible')) {
         overlay.style.position = 'absolute';
         overlay.style.top = visibleTop + 'px';
         overlay.style.left = '0';
         overlay.style.right = '0';
-        overlay.style.height = (visibleBottom - visibleTop) + 'px';
+        overlay.style.height = iframeVisibleHeight + 'px';
       }
 
       requestAnimationFrame(updateFloatingPositions);
