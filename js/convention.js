@@ -33,15 +33,20 @@ function detectIframeMode() {
 }
 
 /**
- * Positionne les elements flottants (bouton menu, action-bar) en mode iframe.
+ * Positionne les elements flottants (bouton menu, action-bar, sidebar) en mode iframe.
  *
- * Probleme : dans un iframe dimensionne a la hauteur du contenu (~30000px),
- * window.innerHeight = hauteur de l'iframe (pas du viewport visible),
- * position:fixed = fixe dans l'iframe (pas dans le viewport), et
- * getBoundingClientRect().top = 0 (pas de scroll interne).
+ * Probleme : l'iframe est dimensionne a la hauteur du contenu (~30000px) par le parent.
+ * Le parent scrolle la page, pas l'iframe. Donc :
+ * - position:fixed se fixe sur le viewport de l'iframe = le contenu entier (inutile)
+ * - window.innerHeight = hauteur iframe (~30000px), pas viewport visible (~900px)
+ * - getBoundingClientRect().top toujours 0 (pas de scroll interne)
+ * - IntersectionObserver avec sentinelle unique : rootBounds null en cross-origin
  *
- * Solution : utiliser IntersectionObserver qui retourne les coordonnees
- * par rapport au VRAI viewport du navigateur (meme cross-origin).
+ * Solution : MULTI-SENTINELLES IntersectionObserver.
+ * On place une sentinelle invisible tous les 200px dans le document.
+ * L'IntersectionObserver detecte lesquelles sont dans le viewport reel.
+ * La premiere visible = haut du viewport, la derniere = bas du viewport.
+ * Fonctionne meme en cross-origin car isIntersecting est toujours fiable.
  */
 function setupIframeFloatingElements() {
   setTimeout(function() {
@@ -51,7 +56,7 @@ function setupIframeFloatingElements() {
     var overlay = document.getElementById('toc-overlay');
     if (!tocBtn || !actionBar) return;
 
-    // Preparer les elements flottants
+    // Preparer les elements flottants en position absolute
     tocBtn.style.position = 'absolute';
     tocBtn.style.display = 'flex';
     tocBtn.style.zIndex = '60';
@@ -72,51 +77,84 @@ function setupIframeFloatingElements() {
       btnsEl.style.justifyContent = 'center';
     }
 
-    // Creer un element sentinelle couvrant tout le document
-    // L'IntersectionObserver nous donne sa boundingClientRect par rapport au viewport reel
-    var sentinel = document.createElement('div');
-    sentinel.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:100%;pointer-events:none;visibility:hidden;';
-    document.body.appendChild(sentinel);
+    // --- MULTI-SENTINELLES ---
+    // Placer une sentinelle tous les STEP pixels dans le document.
+    // Chaque sentinelle est un div de 1x1px, invisible.
+    var STEP = 200; // espacement en pixels
+    var docHeight = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      1000
+    );
+    var sentinelCount = Math.ceil(docHeight / STEP) + 1;
+    // Limiter le nombre de sentinelles pour la performance
+    if (sentinelCount > 300) {
+      STEP = Math.ceil(docHeight / 300);
+      sentinelCount = Math.ceil(docHeight / STEP) + 1;
+    }
+
+    var sentinels = [];
+    var sentinelContainer = document.createElement('div');
+    sentinelContainer.style.cssText = 'position:absolute;top:0;left:0;width:1px;pointer-events:none;';
+    sentinelContainer.setAttribute('aria-hidden', 'true');
+
+    for (var i = 0; i < sentinelCount; i++) {
+      var s = document.createElement('div');
+      s.style.cssText = 'position:absolute;width:1px;height:1px;visibility:hidden;';
+      s.style.top = (i * STEP) + 'px';
+      s._yPos = i * STEP;
+      s._visible = false;
+      sentinelContainer.appendChild(s);
+      sentinels.push(s);
+    }
+    document.body.appendChild(sentinelContainer);
 
     var visibleTop = 0;
     var visibleBottom = 800;
 
-    // IntersectionObserver avec threshold granulaire pour updates frequents
-    var thresholds = [];
-    for (var i = 0; i <= 100; i++) thresholds.push(i / 100);
-
+    // Observer toutes les sentinelles
     var observer = new IntersectionObserver(function(entries) {
-      var entry = entries[0];
-      if (!entry) return;
+      for (var e = 0; e < entries.length; e++) {
+        entries[e].target._visible = entries[e].isIntersecting;
+      }
 
-      // entry.boundingClientRect = position de la sentinelle dans le viewport reel
-      // entry.rootBounds = viewport du navigateur (ou null en cross-origin)
-      var rect = entry.boundingClientRect;
-      var rootH = entry.rootBounds ? entry.rootBounds.height : (window.visualViewport ? window.visualViewport.height : 800);
+      // Determiner la zone visible : premier et dernier sentinel visible
+      var firstVisible = -1;
+      var lastVisible = -1;
+      for (var j = 0; j < sentinels.length; j++) {
+        if (sentinels[j]._visible) {
+          if (firstVisible === -1) firstVisible = j;
+          lastVisible = j;
+        }
+      }
 
-      // La sentinelle couvre tout le doc. Sa position top dans le viewport nous dit
-      // combien le document est scrolle.
-      // visibleTop dans le document = max(0, -rect.top)
-      // visibleBottom dans le document = min(rect.height, -rect.top + rootH)
-      visibleTop = Math.max(0, -rect.top);
-      visibleBottom = Math.min(rect.height, -rect.top + rootH);
-    }, { threshold: thresholds });
+      if (firstVisible >= 0 && lastVisible >= 0) {
+        visibleTop = sentinels[firstVisible]._yPos;
+        visibleBottom = sentinels[lastVisible]._yPos + STEP;
+      }
+    }, { threshold: 0 });
 
-    observer.observe(sentinel);
+    for (var k = 0; k < sentinels.length; k++) {
+      observer.observe(sentinels[k]);
+    }
 
-    // Repositionner les elements a chaque frame
+    // Repositionner les elements flottants a chaque frame
     function updatePositions() {
       var viewH = visibleBottom - visibleTop;
-      if (viewH < 100) viewH = 800; // fallback
+      if (viewH < 100) viewH = 800;
 
-      tocBtn.style.top = (visibleBottom - 120) + 'px';
+      // Bouton hamburger : coin inferieur droit de la zone visible
+      tocBtn.style.top = (visibleBottom - 80) + 'px';
       tocBtn.style.left = 'auto';
       tocBtn.style.right = '20px';
       tocBtn.style.bottom = 'auto';
 
+      // Action bar : barre fixee en bas de la zone visible
       actionBar.style.top = (visibleBottom - actionBar.offsetHeight) + 'px';
       actionBar.style.bottom = 'auto';
 
+      // Sidebar et overlay : seulement quand ouvert
       if (sidebar && sidebar.classList.contains('open')) {
         sidebar.style.top = visibleTop + 'px';
         sidebar.style.height = viewH + 'px';
@@ -133,7 +171,17 @@ function setupIframeFloatingElements() {
     }
 
     requestAnimationFrame(updatePositions);
-    console.log('Convention: iframe floating elements (IntersectionObserver) initialises');
+
+    // Ecouter aussi les messages du parent pour la position de scroll (optionnel)
+    window.addEventListener('message', function(evt) {
+      if (evt.data && evt.data.kind === 'scroll-info') {
+        visibleTop = Math.max(0, evt.data.scrollTop || 0);
+        var vh = evt.data.viewportHeight || 800;
+        visibleBottom = visibleTop + vh;
+      }
+    });
+
+    console.log('Convention: iframe multi-sentinel (' + sentinelCount + ' sentinelles, step=' + STEP + 'px)');
   }, 500);
 }
 
