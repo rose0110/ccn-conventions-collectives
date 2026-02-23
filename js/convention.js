@@ -178,7 +178,7 @@ function toggleGroup(header) {
   if (groupId) {
     const target = document.getElementById(groupId);
     if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      smartScrollTo(target);
     }
   }
 }
@@ -186,9 +186,27 @@ function toggleGroup(header) {
 function scrollToSection(secId) {
   const el = document.getElementById(secId);
   if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    // Fermer le menu mobile
+    smartScrollTo(el);
     closeMobileToc();
+  }
+}
+
+/**
+ * Scroll intelligent : si on est dans un iframe, envoie un postMessage
+ * au parent pour qu'il scrolle son conteneur. Sinon, scrollIntoView classique.
+ */
+function smartScrollTo(el) {
+  if (IS_IFRAME && window.parent) {
+    // Calculer la position de l'element par rapport au haut du document iframe
+    const rect = el.getBoundingClientRect();
+    const offsetTop = rect.top + window.scrollY;
+    window.parent.postMessage({
+      source: 'ccn-app',
+      type: 'scrollTo',
+      top: offsetTop
+    }, '*');
+  } else {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 
