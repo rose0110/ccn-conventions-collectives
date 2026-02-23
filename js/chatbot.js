@@ -12,22 +12,28 @@ let geminiConfigLoaded = false;
 async function loadGeminiConfig() {
   if (geminiConfigLoaded) return;
 
-  // 1. Essayer config.json (local / dev)
-  try {
-    const resp = await fetch('config.json');
-    if (!resp.ok) throw new Error('config.json non trouve');
-    const cfg = await resp.json();
-    GEMINI_API_KEY = cfg.GEMINI_API_KEY || "";
-    GEMINI_MODEL = cfg.GEMINI_MODEL || "gemini-2.5-flash";
-  } catch (err) {
-    // 2. Fallback : cle stockee dans localStorage (GitHub Pages)
-    const saved = localStorage.getItem('gemini_api_key');
-    if (saved) {
-      GEMINI_API_KEY = saved;
-      console.log('Chatbot: cle API chargee depuis localStorage');
-    } else {
-      console.warn('Chatbot: config.json introuvable et pas de cle en cache.');
-      GEMINI_API_KEY = "";
+  // 1. Parametre URL ?apiKey= (transmis par le parent iframe)
+  const urlKey = new URLSearchParams(window.location.search).get('apiKey');
+  if (urlKey) {
+    GEMINI_API_KEY = urlKey;
+    console.log('Chatbot: cle API chargee depuis URL');
+  }
+
+  // 2. Essayer config.json (local / dev)
+  if (!GEMINI_API_KEY) {
+    try {
+      const resp = await fetch('config.json');
+      if (!resp.ok) throw new Error('config.json non trouve');
+      const cfg = await resp.json();
+      GEMINI_API_KEY = cfg.GEMINI_API_KEY || "";
+      GEMINI_MODEL = cfg.GEMINI_MODEL || "gemini-2.5-flash";
+    } catch (err) {
+      // 3. Fallback : cle stockee dans localStorage
+      const saved = localStorage.getItem('gemini_api_key');
+      if (saved) {
+        GEMINI_API_KEY = saved;
+        console.log('Chatbot: cle API chargee depuis localStorage');
+      }
     }
   }
 
