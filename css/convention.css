@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding-top: 49px; /* espace reserve pour la action-bar fixed */
 }
 
 /* Zone contenu + sidebar cote a cote */
@@ -15,7 +14,6 @@
   display: flex;
   flex: 1;
   min-height: 0;
-  margin-right: 290px; /* espace reserve pour la sidebar fixed */
 }
 
 /* ===== SIDEBAR (DROITE) ===== */
@@ -26,12 +24,30 @@
   border-left: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  position: fixed;
-  right: 0;
+  position: sticky;
   top: 49px; /* hauteur de la action-bar */
   height: calc(100vh - 49px);
   overflow: hidden;
   transition: transform 0.3s ease;
+  z-index: 30;
+}
+
+/* Mode iframe : sidebar et action-bar repositionnees par JS */
+.iframe-mode .action-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 40;
+}
+.iframe-mode #app {
+  padding-top: 49px;
+}
+.iframe-mode .app-body {
+  margin-right: 290px;
+}
+.iframe-mode .sidebar {
+  position: absolute;
+  right: 0;
   z-index: 30;
 }
 
@@ -177,10 +193,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 40;
   box-shadow: var(--shadow-sm);
   flex-shrink: 0;
