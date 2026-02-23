@@ -32,35 +32,6 @@
   z-index: 30;
 }
 
-/* ===== MODE IFRAME ===== */
-/* En iframe, sticky/fixed ne fonctionne pas car le scroll est sur le parent.
-   Solution : JS repositionne les elements en position:absolute via requestAnimationFrame.
-   La sidebar s'ouvre en overlay via le bouton flottant (meme mecanisme que mobile). */
-
-/* Sidebar en overlay (meme principe que mobile) */
-.iframe-mode .sidebar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  transform: translateX(100%);
-  z-index: 50;
-}
-.iframe-mode .sidebar.open {
-  transform: translateX(0);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Action-bar : le JS gere le positionnement, on ajoute juste le padding */
-.iframe-mode .action-bar {
-  padding: 8px 16px;
-}
-
-/* Padding en bas pour le contenu (espace pour la barre d'actions flottante) */
-.iframe-mode .content-scroll {
-  padding-bottom: 70px;
-}
-
 /* Recherche sidebar */
 .sidebar-search {
   padding: 10px 16px;
