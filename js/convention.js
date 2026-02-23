@@ -23,35 +23,7 @@ function detectIframeMode() {
   if (!inIframe) return;
 
   document.documentElement.classList.add('iframe-mode');
-  console.log('Convention: mode iframe detecte');
-
-  // Repositionner sidebar et action-bar via IntersectionObserver
-  var actionBar = document.querySelector('.action-bar');
-  var sidebar = document.querySelector('.sidebar');
-  if (!actionBar || !sidebar) return;
-
-  // Sentinel element en haut de page pour detecter le scroll
-  var sentinel = document.createElement('div');
-  sentinel.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none;';
-  document.body.prepend(sentinel);
-
-  // Utiliser un interval qui lit la position visible
-  var lastTop = 0;
-  function updatePositions() {
-    // getBoundingClientRect du body donne la position de l'iframe par rapport au viewport visible
-    var rect = document.documentElement.getBoundingClientRect();
-    var scrollTop = -rect.top;
-    if (scrollTop < 0) scrollTop = 0;
-
-    if (Math.abs(scrollTop - lastTop) > 0.5) {
-      lastTop = scrollTop;
-      actionBar.style.top = scrollTop + 'px';
-      sidebar.style.top = (scrollTop + 49) + 'px';
-      sidebar.style.height = 'calc(100vh - 49px)';
-    }
-    requestAnimationFrame(updatePositions);
-  }
-  requestAnimationFrame(updatePositions);
+  console.log('Convention: mode iframe detecte — scroll interne active');
 }
 
 async function init() {

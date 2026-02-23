@@ -32,23 +32,14 @@
   z-index: 30;
 }
 
-/* Mode iframe : sidebar et action-bar repositionnees par JS */
-.iframe-mode .action-bar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 40;
+/* Mode iframe : forcer le scroll interne pour que sticky fonctionne */
+.iframe-mode, .iframe-mode body {
+  height: 100vh !important;
+  overflow: hidden !important;
 }
 .iframe-mode #app {
-  padding-top: 49px;
-}
-.iframe-mode .app-body {
-  margin-right: 290px;
-}
-.iframe-mode .sidebar {
-  position: absolute;
-  right: 0;
-  z-index: 30;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 /* Recherche sidebar */
