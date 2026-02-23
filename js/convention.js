@@ -23,7 +23,13 @@ function detectIframeMode() {
   if (!inIframe) return;
 
   document.documentElement.classList.add('iframe-mode');
-  console.log('Convention: mode iframe detecte — scroll interne active');
+  console.log('Convention: mode iframe detecte');
+
+  // Demander au parent de fixer la hauteur de l'iframe
+  // pour que le scroll se fasse a l'interieur (sticky fonctionne)
+  try {
+    window.top.postMessage({ type: 'ccn-fix-iframe-height' }, '*');
+  } catch(e) {}
 }
 
 async function init() {

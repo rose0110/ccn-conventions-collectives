@@ -11,20 +11,84 @@ let geminiConfigLoaded = false;
 
 async function loadGeminiConfig() {
   if (geminiConfigLoaded) return;
+
+  // 1. Essayer config.json (local / dev)
   try {
     const resp = await fetch('config.json');
     if (!resp.ok) throw new Error('config.json non trouve');
     const cfg = await resp.json();
     GEMINI_API_KEY = cfg.GEMINI_API_KEY || "";
     GEMINI_MODEL = cfg.GEMINI_MODEL || "gemini-2.5-flash";
+  } catch (err) {
+    // 2. Fallback : cle stockee dans localStorage (GitHub Pages)
+    const saved = localStorage.getItem('gemini_api_key');
+    if (saved) {
+      GEMINI_API_KEY = saved;
+      console.log('Chatbot: cle API chargee depuis localStorage');
+    } else {
+      console.warn('Chatbot: config.json introuvable et pas de cle en cache.');
+      GEMINI_API_KEY = "";
+    }
+  }
+
+  if (GEMINI_API_KEY) {
     GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
     geminiConfigLoaded = true;
     console.log('Chatbot: config Gemini chargee');
-  } catch (err) {
-    console.warn('Chatbot: config.json introuvable — IA desactivee. Copiez config.example.json vers config.json avec votre cle API.');
-    GEMINI_API_KEY = "";
+  } else {
     GEMINI_URL = "";
   }
+}
+
+/** Affiche un prompt pour saisir la cle API (si absente) */
+function promptApiKey() {
+  return new Promise(function(resolve) {
+    // Overlay
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center;';
+
+    var box = document.createElement('div');
+    box.style.cssText = 'background:#fff;border-radius:12px;padding:28px 32px;max-width:420px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.18);font-family:inherit;';
+    box.innerHTML = '<div style="font-size:16px;font-weight:700;margin-bottom:6px;color:#1e2028;">🔑 Clé API Gemini requise</div>' +
+      '<div style="font-size:13px;color:#5a5e6a;margin-bottom:16px;">Pour utiliser l\'assistant IA et le comparateur, entrez votre clé API Google Gemini.<br><a href="https://aistudio.google.com/apikey" target="_blank" style="color:#42D80F;">Obtenir une clé gratuite →</a></div>' +
+      '<input id="apikey-input" type="text" placeholder="AIzaSy..." style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;box-sizing:border-box;margin-bottom:14px;">' +
+      '<div style="display:flex;gap:10px;justify-content:flex-end;">' +
+      '<button id="apikey-cancel" style="padding:8px 18px;border:1px solid #d1d5db;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;">Annuler</button>' +
+      '<button id="apikey-ok" style="padding:8px 18px;border:none;border-radius:8px;background:#42D80F;color:#fff;cursor:pointer;font-weight:600;font-size:13px;">Valider</button>' +
+      '</div>';
+
+    ov.appendChild(box);
+    document.body.appendChild(ov);
+
+    var inp = document.getElementById('apikey-input');
+    inp.focus();
+
+    function close(val) {
+      ov.remove();
+      resolve(val || '');
+    }
+
+    document.getElementById('apikey-cancel').onclick = function() { close(''); };
+    document.getElementById('apikey-ok').onclick = function() { close(inp.value.trim()); };
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') close(inp.value.trim());
+      if (e.key === 'Escape') close('');
+    });
+  });
+}
+
+/** Demande la cle si absente, stocke dans localStorage */
+async function ensureApiKey() {
+  if (GEMINI_API_KEY) return true;
+  var key = await promptApiKey();
+  if (!key) return false;
+  GEMINI_API_KEY = key;
+  GEMINI_MODEL = GEMINI_MODEL || 'gemini-2.5-flash';
+  GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+  localStorage.setItem('gemini_api_key', key);
+  geminiConfigLoaded = true;
+  console.log('Chatbot: cle API enregistree dans localStorage');
+  return true;
 }
 
 let chatOpen = false;
@@ -468,11 +532,10 @@ async function sendMessage() {
   const question = input.value.trim();
   if (!question || chatIsTyping) return;
 
-  // Verifier que la cle API est configuree
+  // Verifier que la cle API est configuree (demander si absente)
   if (!GEMINI_API_KEY) {
-    addMessage(question, 'user');
-    addMessage("L'assistant IA n'est pas configure. Veuillez ajouter votre cle API Gemini dans le fichier config.json.", 'bot');
-    return;
+    var hasKey = await ensureApiKey();
+    if (!hasKey) return;
   }
 
   // Add user message

@@ -32,15 +32,7 @@
   z-index: 30;
 }
 
-/* Mode iframe : forcer le scroll interne pour que sticky fonctionne */
-.iframe-mode, .iframe-mode body {
-  height: 100vh !important;
-  overflow: hidden !important;
-}
-.iframe-mode #app {
-  height: 100vh;
-  overflow-y: auto;
-}
+/* Mode iframe : pas de style specifique, gere par JS */
 
 /* Recherche sidebar */
 .sidebar-search {

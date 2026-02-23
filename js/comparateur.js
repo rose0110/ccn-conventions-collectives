@@ -199,10 +199,15 @@ async function requestGeminiComparison(sectionKey) {
   const calcBtn = document.querySelector(`.btn-calc[data-section="${sectionKey}"]`);
   if (!verdictEl || !codeTravailData || !conventionData) return;
 
-  // Verifier que la cle API est configuree
+  // Verifier que la cle API est configuree (demander si absente)
   if (!GEMINI_API_KEY || !GEMINI_URL) {
-    verdictEl.innerHTML = '<span class="verdict-badge verdict--error">Cle API non configuree (voir config.json)</span>';
-    return;
+    if (typeof ensureApiKey === 'function') {
+      var hasKey = await ensureApiKey();
+      if (!hasKey) return;
+    } else {
+      verdictEl.innerHTML = '<span class="verdict-badge verdict--error">Cle API non configuree</span>';
+      return;
+    }
   }
 
   // Desactiver bouton + loading
