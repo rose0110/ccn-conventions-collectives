@@ -34,14 +34,14 @@
 
 /* ===== MODE IFRAME ===== */
 /* En iframe, sticky/fixed ne fonctionne pas car le scroll est sur le parent.
-   Solution : sidebar en overlay via bouton flottant, action-bar en barre flottante en bas. */
+   Solution : JS repositionne les elements en position:absolute via requestAnimationFrame.
+   La sidebar s'ouvre en overlay via le bouton flottant (meme mecanisme que mobile). */
 
-/* Cacher la sidebar classique en iframe (elle sera accessible via bouton flottant) */
+/* Sidebar en overlay (meme principe que mobile) */
 .iframe-mode .sidebar {
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
-  bottom: 0;
   height: 100vh;
   transform: translateX(100%);
   z-index: 50;
@@ -51,42 +51,14 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* Afficher le bouton flottant menu en iframe */
-.iframe-mode .mobile-toc-toggle {
-  display: flex;
-}
-
-/* Action-bar : transformer en barre flottante en bas */
+/* Action-bar : le JS gere le positionnement, on ajoute juste le padding */
 .iframe-mode .action-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: auto;
-  z-index: 55;
-  border-bottom: none;
-  border-top: 1px solid var(--border-light);
-  box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
   padding: 8px 16px;
 }
-/* Cacher le titre dans l'action-bar en iframe (gain de place) */
-.iframe-mode .action-bar-title {
-  display: none;
-}
-/* Boutons centres */
-.iframe-mode .action-btns {
-  width: 100%;
-  justify-content: center;
-}
 
-/* Ajouter du padding en bas pour ne pas masquer le contenu sous la barre flottante */
+/* Padding en bas pour le contenu (espace pour la barre d'actions flottante) */
 .iframe-mode .content-scroll {
   padding-bottom: 70px;
-}
-
-/* Le bouton flottant menu doit etre au-dessus de la barre d'actions */
-.iframe-mode .mobile-toc-toggle {
-  bottom: 60px;
 }
 
 /* Recherche sidebar */

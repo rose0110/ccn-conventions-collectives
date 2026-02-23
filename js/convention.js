@@ -25,11 +25,94 @@ function detectIframeMode() {
   document.documentElement.classList.add('iframe-mode');
   console.log('Convention: mode iframe detecte');
 
-  // Demander au parent de fixer la hauteur de l'iframe
-  // pour que le scroll se fasse a l'interieur (sticky fonctionne)
-  try {
-    window.top.postMessage({ type: 'ccn-fix-iframe-height' }, '*');
-  } catch(e) {}
+  // En iframe, position:fixed et position:sticky ne fonctionnent pas
+  // car l'iframe est dimensionnee a la hauteur du contenu et c'est le parent qui scrolle.
+  // Solution : repositionner les elements flottants en position:absolute
+  // en utilisant un IntersectionObserver sur un element sentinelle.
+  setupIframeFloatingElements();
+}
+
+/**
+ * Positionne les elements flottants (bouton menu, action-bar) en mode iframe.
+ * Utilise un requestAnimationFrame loop avec getBoundingClientRect
+ * pour calculer la zone visible de l'iframe dans le viewport du navigateur.
+ */
+function setupIframeFloatingElements() {
+  // Attendre que le DOM soit pret
+  setTimeout(function() {
+    var tocBtn = document.getElementById('mobile-toc-toggle');
+    var actionBar = document.querySelector('.action-bar');
+    if (!tocBtn || !actionBar) return;
+
+    // Forcer les elements en position absolute (pas fixed, car fixed = iframe viewport = tout le contenu)
+    tocBtn.style.position = 'absolute';
+    tocBtn.style.display = 'flex';
+    tocBtn.style.zIndex = '60';
+
+    actionBar.style.position = 'absolute';
+    actionBar.style.left = '0';
+    actionBar.style.right = '0';
+    actionBar.style.zIndex = '55';
+    actionBar.style.borderTop = '1px solid var(--border-light)';
+    actionBar.style.borderBottom = 'none';
+    actionBar.style.boxShadow = '0 -2px 12px rgba(0,0,0,0.08)';
+
+    // Cacher le titre pour gagner de la place
+    var titleEl = actionBar.querySelector('.action-bar-title');
+    if (titleEl) titleEl.style.display = 'none';
+    var btnsEl = actionBar.querySelector('.action-btns');
+    if (btnsEl) {
+      btnsEl.style.width = '100%';
+      btnsEl.style.justifyContent = 'center';
+    }
+
+    // Recuperer la sidebar pour la repositionner aussi
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('toc-overlay');
+
+    // Le scroll vient du parent — on recalcule la position visible a chaque frame
+    function updateFloatingPositions() {
+      // getBoundingClientRect() dans une iframe retourne les coords par rapport au viewport du navigateur
+      // documentElement.getBoundingClientRect().top = combien le haut du doc iframe est decale vs le viewport
+      var docRect = document.documentElement.getBoundingClientRect();
+      // viewportHeight = hauteur visible du navigateur
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+
+      // La zone visible de l'iframe dans le navigateur :
+      // - haut visible = max(0, -docRect.top)
+      // - bas visible = min(docRect.height, -docRect.top + vh)
+      var visibleTop = Math.max(0, -docRect.top);
+      var visibleBottom = Math.min(docRect.height, -docRect.top + vh);
+
+      // Positionner le bouton TOC en bas a droite de la zone visible
+      tocBtn.style.top = (visibleBottom - 120) + 'px';
+      tocBtn.style.left = 'auto';
+      tocBtn.style.right = '20px';
+      tocBtn.style.bottom = 'auto';
+
+      // Positionner la barre d'actions en bas de la zone visible
+      actionBar.style.top = (visibleBottom - actionBar.offsetHeight) + 'px';
+      actionBar.style.bottom = 'auto';
+
+      // Repositionner la sidebar et l'overlay dans la zone visible
+      if (sidebar) {
+        sidebar.style.top = visibleTop + 'px';
+        sidebar.style.height = (visibleBottom - visibleTop) + 'px';
+      }
+      if (overlay) {
+        overlay.style.position = 'absolute';
+        overlay.style.top = visibleTop + 'px';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.height = (visibleBottom - visibleTop) + 'px';
+      }
+
+      requestAnimationFrame(updateFloatingPositions);
+    }
+
+    requestAnimationFrame(updateFloatingPositions);
+    console.log('Convention: iframe floating elements initialises');
+  }, 500);
 }
 
 async function init() {
