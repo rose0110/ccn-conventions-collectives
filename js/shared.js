@@ -101,62 +101,8 @@ if (EMBED_MODE) {
 }
 
 // ===== AUTO RESIZE IFRAME =====
-// Envoie la hauteur reelle du document au parent pour ajuster l'iframe.
-// Format : { kind: 'resize-height', height: number }
-
-(function initIframeResize() {
-  if (!IS_IFRAME) return;
-
-  let lastHeight = 0;
-
-  function sendHeight() {
-    const h = Math.max(
-      document.body.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.scrollHeight,
-      document.documentElement.offsetHeight
-    );
-    if (h !== lastHeight && h > 0) {
-      lastHeight = h;
-      window.parent.postMessage({ kind: 'resize-height', height: h }, '*');
-    }
-  }
-
-  // Envois multiples au chargement pour capturer les mises en page tardives
-  [0, 50, 150, 300, 500, 1000].forEach(function(delay) {
-    setTimeout(sendHeight, delay);
-  });
-
-  // Polling toutes les 200ms pendant les 2 premieres secondes (contenus dynamiques)
-  let pollCount = 0;
-  const pollInterval = setInterval(function() {
-    sendHeight();
-    pollCount++;
-    if (pollCount >= 10) clearInterval(pollInterval); // 10 x 200ms = 2s
-  }, 200);
-
-  // ResizeObserver pour detecter les changements en continu
-  if (typeof ResizeObserver !== 'undefined') {
-    const ro = new ResizeObserver(function() {
-      sendHeight();
-    });
-    ro.observe(document.documentElement);
-  } else if (typeof MutationObserver !== 'undefined') {
-    // Fallback MutationObserver
-    const mo = new MutationObserver(function() {
-      sendHeight();
-    });
-    mo.observe(document.body, { childList: true, subtree: true, attributes: true });
-  }
-
-  // Ecouter aussi les evenements de redimensionnement et chargement complet
-  window.addEventListener('resize', sendHeight);
-  window.addEventListener('load', function() {
-    [0, 100, 300, 600].forEach(function(delay) {
-      setTimeout(sendHeight, delay);
-    });
-  });
-})();
+// Desactive : on laisse l'iframe gerer son propre scroll interne
+// pour que position:sticky fonctionne sur la sidebar et l'action-bar.
 
 
 // ===== UTILITAIRES =====
